@@ -1,0 +1,5 @@
+build/
+cary_reader.egg-info/
+dist/
+*.pyc
+__pycache__
