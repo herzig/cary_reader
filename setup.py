@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
     
 setuptools.setup(
     name='cary_reader',  
-    version='0.1',
+    version='0.2',
     author="Ivo Herzig",
     author_email="hezi@zhaw.ch",
     description="Reads and processes Agilent Cary Eclipse Spectrophotometer csv files",
@@ -14,7 +14,7 @@ setuptools.setup(
     url="",
 	install_requires=[
 		'pandas'
-	]
+	],
     packages=setuptools.find_packages(),
     classifiers=[
             "License :: OSI Approved :: MIT License",

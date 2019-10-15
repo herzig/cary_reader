@@ -14,14 +14,14 @@ class CaryData:
 		collection_times (dict): contains the collection time for each trace name
     """
 
-    file = None
-    contains_log = False
-    all_wavelengths_equal = False
-    names = None
-    collection_times = None
-    
-    _traces = {} 
-    _df = None
+    def __init__(self):
+        self.file = None
+        self.contains_log = False
+        self.all_wavelengths_equal = False
+        self.collection_times = None
+        
+        self._traces = {} 
+        self._df = None
     
 
     def __getitem__(self, name):
@@ -69,11 +69,12 @@ class CaryData:
         return df
     
     @staticmethod
-    def from_csv(file):
+    def from_csv(file, skiplog=False):
         """reads spectra from a Cary Eclipse csv file and creates a new CaryData instance
         
         Args
             file (str): file path to the csv file
+            skiplog (bool): set True to skip parsing of log (possible speedup for larger files)
         """
         
         result = CaryData()
@@ -115,7 +116,7 @@ class CaryData:
             
         result.names = list(result._traces.keys())
         
-        if result.contains_log:
+        if result.contains_log and not skiplog:
             result._parse_log(endidx+2) # +2 because header rows not included in dataframe
             
         result._df = df
