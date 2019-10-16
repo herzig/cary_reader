@@ -63,10 +63,40 @@ class CaryData:
         
         # the excitation wavelength is encoded in each column name.
         # we extract it and convert it to float
-        columns = [float(re.search(r'EX_(\d+\.\d+)', col).groups()[0]) for col in df]
+        columns = [float(re.search(r'EX_(\d+\.\d+)', col).groups()[0]) for col in df.columns]
         df.columns = columns 
         
         return df
+
+    def get_multisample_ex_em_matrix(self):
+        """splits a multi-sample exitation-emission matrix scan into separated pandas dataframes
+        
+        Use this method to process csv files that contain exitation-emission scans recorded using the multi-cell holder.
+        The sample names and excitation wavelengths are extracted from the columns of the file
+        
+        Returns: A dictionary of pandas datafram. Each dataframe contains n rows and m columns, where n is emission 
+        wavelengths and m is the excitation wavelengths.
+        """
+        df = self.get_collapsed_df()
+
+        result = {}
+        # column names have the format {}_EX_{exwavelen}
+        for col in df.columns:
+            match = re.match(r'(.+)_EX_(\d+\.\d+)', col)
+            grps = match.groups()
+            sample = grps[0]
+            wavelen = float(grps[1])
+
+            if not(sample in result):
+                result[sample] = pd.DataFrame()
+            
+            result[sample][wavelen] = df[col]
+
+        for _,i in result.items():
+            i.index = df.index
+
+        return result
+
     
     @staticmethod
     def from_csv(file, skiplog=False):

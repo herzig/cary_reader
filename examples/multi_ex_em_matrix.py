@@ -5,16 +5,23 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 
 from cary_reader import CaryData
 
-data = CaryData.from_csv('test_data/547_304_678_961_pm800.csv')
-df = data.get_collapsed_df()
+# four samples
 
-# extract dataframe for each single sample
-datasets = {
-    961: df.iloc[:,0::4], 
-    678: df.iloc[:,1::4], 
-    304: df.iloc[:,2::4], 
-    547: df.iloc[:,3::4]}
+data = CaryData.from_csv('test_data/multi_sample_matrix_4s.csv', skiplog=True)
+dataframes = data.get_multisample_ex_em_matrix()
+# dataframes is now a dictionary of pandas data frames with the sample name as key. Each dataframe is an excitation emission matrix
 
-# rewrite columns names to excitation wavelengths
-for (n,d) in datasets.items():
-    d.columns = range(300,601,10)
+# some basic tests
+assert len(dataframes) == 4
+assert all([s.shape == (226,31) for _,s in dataframes.items()]) # all ex-em matrices must have the same shape
+
+
+# three samples
+
+data = CaryData.from_csv('test_data/multi_sample_matrix_3s.csv', skiplog=True)
+dataframes = data.get_multisample_ex_em_matrix()
+# dataframes is now a dictionary of pandas data frames with the sample name as key. Each dataframe is an excitation emission matrix
+
+# some basic tests
+assert len(dataframes) == 3
+assert all([s.shape == (226,31) for _,s in dataframes.items()]) # all ex-em matrices must have the same shape

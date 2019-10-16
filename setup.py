@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
     
 setuptools.setup(
     name='cary_reader',  
-    version='0.2',
+    version='0.3',
     author="Ivo Herzig",
     author_email="hezi@zhaw.ch",
     description="Reads and processes Agilent Cary Eclipse Spectrophotometer csv files",
